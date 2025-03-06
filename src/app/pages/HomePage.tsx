@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import debounce from 'lodash/debounce';
 import RepoApi from '../services/repo.api';
-import { Repository } from '../types/repository';
 import ReposList from '../components/ReposList';
 import { useAtom } from 'jotai';
 import  repositoriesAtom  from '../services/repo.data';
@@ -32,11 +32,10 @@ export default function HomePage() {
        updateData(search)
     }, [params.get('search'),updateData])
 
-
-    const handleSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleSearch = debounce(async (e: React.ChangeEvent<HTMLInputElement>) => {
         const username = e.target.value;
-        setParams({search: username})
-    };
+        setParams({ search: username });
+    }, 300);
 
     const handleSort = () => {
         setSortByStars(!sortByStars);
